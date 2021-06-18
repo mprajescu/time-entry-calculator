@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="description" content="Time Entry Calculator">
+<meta name="keywords" content="HTML, CSS, JavaScript">
+<meta name="author" content="Mihail-Vlad Prajescu">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title> Time Entry Calculator </title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 5%;
+	font-family: sans-serif;
+}
+
+.btn{
+	background: #FFF;
+	padding: 10px 20px;
+	display: block;
+	color:#000;
+	text-decoration: none;
+	border: 1px solid #cfcfcf;
+	border-radius: 6px;
+	width: 250px;
+	height: 34px;
+	font-size: 18px;
+	line-height: 18px;
+	padding: 6px 16px;
+	outline: none;
+	-webkit-transition:box-shadow 0.5s;
+}
+
+.btn i{
+	float: right;
+	margin-top: 2px;
+}
+
+.btn:hover{
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+	font-size: 20px;
+	transition: 0.6s;
+}
+
+.btn:focus{
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+	outline: 0;
+	font-size: 20px;
+	transition: 0.6s;
+}
+
+.btn:active{
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
+	background:-webkit-linear-gradient(top, #FFF 0%,#ECECEC 100%);
+}
+
+input:hover{
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+}
+input:hover:readonly{
+	box-shadow: none;
+}
+
+.input-block{
+	position: relative;
+	margin-bottom: 40px;
+	margin-top: 40px;
+	margin-left: 150px;
+}
+
+.input-block input{
+	position: relative;
+	width: 250px;
+	height: 34px;
+	font-size: 18px;
+	line-height: 18px;
+	padding: 6px 16px;
+	outline: none;
+	border: 1px solid #cfcfcf;
+	border-radius: 6px;
+	-webkit-transition:box-shadow 0.6s;
+}
+
+.input-block input:readonly {
+	position: relative;
+	width: 250px;
+	height: 34px;
+	font-size: 18px;
+	line-height: 14px;
+	padding: 6px 16px;
+	outline: none;
+	border: 1px solid #cfcfcf;
+	border-radius: 6px;
+	-webkit-transition:box-shadow 0.6s;
+	background-color: #fff;
+}
+
+.input-block input:focus {
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-block input:focus + label, .input-block input:hover + label {
+	top: 8px;
+	left: -150px;
+	font-size: 18px;
+	color: #000;
+	transition: 0.6s;
+
+}
+
+.input-block label{
+	color: #000;
+	font-size: 14px;
+	line-height: 20px;
+	position: absolute;
+	left: -150px;
+	top: 8px;
+	width: 250px;
+	pointer-events: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#copyTm, #copyHw{
+	background: #FFF;
+	padding: 10px 20px;
+	display: block;
+	color:#000;
+	text-decoration: none;
+	border: 1px solid #cfcfcf;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	width: 100px;
+	height: 34px;
+	font-size: 18px;
+	line-height: 18px;
+	padding: 6px 16px;
+	outline: none;
+	-webkit-transition:box-shadow 0.5s;
+	position: absolute;
+	left: 150px;
+	top: 0px;
+}
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	position: relative;
+	background-color: #fefefe;
+	margin: auto;
+	padding: 0;
+	border-radius: 6px;
+	width: 70%;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	-webkit-animation-name: animatetop;
+	-webkit-animation-duration: 0.6s;
+	animation-name: animatetop;
+	animation-duration: 0.6s
+  
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+	from {top:-300px; opacity:0} 
+	to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+	from {top:-300px; opacity:0}
+	to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+	color: white;
+	float: right;
+	font-size: 38px;
+	font-weight: bold;
+	padding-top: 12px;
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.modal-header {
+	padding: 2px 20px;
+	background-color: #E72222;
+	color: white;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
+.modal-body {
+	padding: 2px 16px;
+	font-size: 18px;
+}
+
+.modal-footer {
+	padding: 2px 16px;
+	background-color: #5cb85c;
+	color: white;
+}
+
+.bottomright {
+	position: fixed;
+	right: 0px; bottom: 10px;
+	height:34px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-top: -10px;
+	padding-bottom: 15px;
+	font-size: 18px;
+	line-height: 18px;
+	text-decoration: none;
+	
+}
+
+.bottomright a {
+	text-decoration: none; 
+	color: #000;
+	outline: none;
+	padding: 15px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
+.bottomright a:hover{
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+	transition: 0.6s;
+	padding: 15px;
+}
+
+.bottomright a:focus{
+	box-shadow: 0px 2px 1px white inset, 0px 0px 20px #2196f3, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+	transition: 0.6s;
+	padding: 15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+	<div>
+
+		<h1>Time Entry Calculator</h1>
+
+		<p>Use the time entries below to calculate the total minutes worked and it will output the number of working hours as a decimal value.</p>
+		<p>You must specify a start time sooner than an end time. </p>
+
+		<div class="input-block">
+			
+			<input type="time" id="STA">
+			<label for="STA">Start Time</label>
+		</div>
+
+		<div class="input-block">
+			
+			<input type="time" id="ATA">
+			<label for="ATA">End Time</label>
+		</div>
+
+		<div class="input-block">
+			<button type="button" class="btn" id="btncalc"> Calculate </button>
+		</div>
+
+		<div class="input-block">
+			
+			<input type="text" readonly id="DIFFMIN">
+			<label for="DIFFMIN">Total Minutes</label>		
+			<button type="button" class="btn" id="copyTm"> Copy </button>
+		</div>
+
+		<div class="input-block">
+			
+			<input type="text" readonly id="DECIM">
+			<label for="DECIM">Hours Worked</label>
+			<button type="button" class="btn" id="copyHw"> Copy </button>
+		</div>
+
+		<!--<input type="time" disabled id="DIFF"> -->
+	  
+	</div>
+
+
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+		
+			<div class="modal-header">
+				<span class="close">&times;</span>
+				<h2>Error!</h2>
+			</div>
+
+			<div class="modal-body">
+				<p id="modalLine"></p>
+			</div>
+
+		</div>
+
+	</div>
+	
+	<div class="bottomright">
+		<p> <a href="mailto:mihai@prajescu.com?subject=Time Entry Calculator Query">© Mihail-Vlad Prajescu <span id="date"></span></a></p>
+	</div>
+
+</body>
+
+<script type="text/javascript">
+
+document.getElementById ("btncalc").addEventListener ("click", timed, false);
+document.getElementById ("copyTm").addEventListener ("click", copyTm, false);
+document.getElementById ("copyHw").addEventListener ("click", copyHw, false);
+
+n =  new Date();
+y = n.getFullYear();
+m = n.getMonth() + 1;
+d = n.getDate();
+document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+
+const formatter = new Intl.NumberFormat('en-US', {
+   minimumFractionDigits: 2,      
+   maximumFractionDigits: 2,
+});
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) 
+  {
+    modal.style.display = "none";
+  }
+}
+
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    if (evt.keyCode == 27) {
+        modal.style.display = "none";
+    }
+};
+
+function timed(){
+  
+    var time1Value = document.getElementById("STA").value;
+    var time2Value = document.getElementById("ATA").value;
+  
+    var time1 = time1Value.split(':').join("");
+    var time2 = time2Value.split(':').join("");
+    
+    if ( time1.match(/^[0-9]{4}$/g) && time2.match(/^[0-9]{4}$/g) )
+    {
+        //lets calculate the difference. But values consist of four digits.
+        var time1Seconds = toSeconds(time1.substr(0,2), time1.substr(2));
+        var time2Seconds = toSeconds(time2.substr(0,2), time2.substr(2));
+
+        if (!time1Seconds || !time2Seconds)
+        {
+            //input is not correct.
+			console.log("Error: Couldn't process time values!");
+			document.getElementById("modalLine").innerHTML = "Couldn't process time values!";
+			modal.style.display = "block";
+            return false;
+        }
+			
+		if (time1Seconds > time2Seconds)
+        {
+            //input is not correct.
+            //alert("Error: Incorrect Start Time or End Time value!");
+			console.log("Error: Start Time is after End Time! Check time values!");
+			document.getElementById("modalLine").innerHTML = "Start Time is after End Time! Check time values!";
+			modal.style.display = "block";
+            return false;
+        }
+
+        var difference = time1Seconds - time2Seconds;
+        if (difference < 0)
+        {
+            difference = Math.abs(difference);
+        }
+        var hours = parseInt(difference/3600) 
+        hours = hours < 10 ? "0" + hours : hours;
+        var minutes =  parseInt((difference/3600) % 1 *60)
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+
+        //document.getElementById("DIFF").value =  hours + ":" + minutes;
+        var decim = document.getElementById("DIFFMIN").value =  parseInt(difference/60);
+        var decimValue = document.getElementById("DECIM").value = formatter.format(decim/60);
+    } 
+	else 
+	{
+		console.log("Error: Incorrect time value format! Check Start Time and/or End Time values. ");
+		document.getElementById("modalLine").innerHTML = "Incorrect time value format! Check Start Time and/or End Time values. ";
+		modal.style.display = "block";
+		return false;
+	} 
+}
+
+function toSeconds(hours, minutes)
+{
+    var seconds = 0;
+    if ( (hours >= 0 && hours < 24) && (minutes >= 0 && minutes < 60))
+    {
+        seconds += (parseInt(hours)*3600) + (parseInt(minutes)*60);
+        return seconds
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function copyTm(){
+  // find the element we will select
+  let copyInput = document.querySelector('#DIFFMIN')
+  // select that input
+  copyInput.select()
+  // copy it!
+  document.execCommand("copy")
+}
+
+function copyHw(){
+  // find the element we will select
+  let copyInput = document.querySelector('#DECIM')
+  // select that input
+  copyInput.select()
+  // copy it!
+  document.execCommand("copy")
+}
+
+</script>
+
+</html>
